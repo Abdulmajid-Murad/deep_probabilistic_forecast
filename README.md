@@ -8,8 +8,7 @@ PyTorch implementation of deep probabilistic forecast applied to air quality.
 
 ## File Structure
 
-## Evaluating Models
-
+## Evaluating Pre-Trained Models
 
 ## Training Models
 

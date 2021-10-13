@@ -20,3 +20,8 @@ python main.py --model=LSTM_MC --task=regression --mode=train --n_epochs=1000
 python main.py --model=LSTM_MC --task=regression --mode=train --n_epochs=2000 --adversarial_training
 python main.py --model=LSTM_MC --task=classification --mode=train --n_epochs=1000
 python main.py --model=LSTM_MC --task=classification --mode=train --n_epochs=1000 --adversarial_training
+
+python main.py --model=BNN --task=regression --mode=train --n_epochs=2500
+python main.py --model=BNN --task=regression --mode=train --n_epochs=3000 --adversarial_training
+python main.py --model=BNN --task=classification --mode=train --n_epochs=500
+python main.py --model=BNN --task=classification --mode=train --n_epochs=500 --adversarial_training

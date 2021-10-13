@@ -7,6 +7,7 @@ from nn_mc import NN_MC
 from ensemble import Deep_Ensemble
 from swag import SWAG
 from lstm_mc import LSTM_MC
+from bnn import BNN
 
 def run(args):
 
@@ -22,6 +23,9 @@ def run(args):
     elif args.model == 'LSTM_MC':
         model_class = LSTM_MC
         linear_input = False
+    elif args.model == 'BNN':
+        model_class = BNN
+        linear_input = True
 
 
     X_train, y_train, X_test, y_test, stats =data_loader(args.data_dir,
@@ -39,12 +43,18 @@ def run(args):
     model = model_class(input_dim, output_dim, args.task)
 
     if args.mode == 'train':
-        model.train(train_loader, args.n_epochs, args.batch_size, stats, args.pre_trained_dir, args.adversarial_training)
+        if args.model == 'BNN':
+            #weight the complexity cost relative to the likelihood cost on each minibatch
+            Nbatches = X_train.shape[0]/args.batch_size
+            model.train(train_loader, args.n_epochs, args.batch_size, stats, args.pre_trained_dir, Nbatches, args.adversarial_training)
+        else:
+            model.train(train_loader, args.n_epochs, args.batch_size, stats, args.pre_trained_dir, args.adversarial_training)
 
     elif args.mode == 'evaluate':
         if args.model == 'SWAG':
             # BatchNorm buffers update using train dataset.
             model.evaluate(test_loader, args.n_samples, stats, args.pre_trained_dir, args.results_dir, train_loader,  args.adversarial_training)
+
         else:
             model.evaluate(test_loader, args.n_samples, stats, args.pre_trained_dir, args.results_dir, args.adversarial_training)
 

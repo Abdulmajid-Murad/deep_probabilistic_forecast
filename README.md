@@ -4,6 +4,10 @@ PyTorch implementation of deep probabilistic forecast applied to air quality.
 
 ## Introduction
 
+In this repo, we build deep probabilistic models that forecast air quality values and predict threshold exceedance events.
+
+[](plots/SWAG/regression_adv.pdf)
+
 ## Environment Setup
 
 ## File Structure

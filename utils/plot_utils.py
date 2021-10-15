@@ -115,9 +115,9 @@ def plot_regression(target_test, mixture_mean, mixture_var, stats, fig_save_name
             axs2_counter += 1
 
     fig2.tight_layout()
-    fig2.savefig(fig_save_name + '.pdf', bbox_inches='tight')
+    fig2.savefig(fig_save_name + '.jpg', bbox_inches='tight')
     fig.tight_layout()
-    fig.savefig(fig_save_name + '_all_stations.pdf', bbox_inches='tight')
+    fig.savefig(fig_save_name + '_all_stations.jpg', bbox_inches='tight')
 
 
 def plot_classification(target_test, samples, stats, fig_save_name):
@@ -186,9 +186,9 @@ def plot_classification(target_test, samples, stats, fig_save_name):
             axs2_counter += 1
 
     fig2.tight_layout()
-    fig2.savefig(fig_save_name + '.pdf', bbox_inches='tight')
+    fig2.savefig(fig_save_name + '.jpg', bbox_inches='tight')
     fig.tight_layout()
-    fig.savefig(fig_save_name + '_all_stations.pdf', bbox_inches='tight')
+    fig.savefig(fig_save_name + '_all_stations.jpg', bbox_inches='tight')
 
 def plot_training_curve(loss_history, lr_history, fig_save_name):
     fig, axs = plt.subplots(1, 2, figsize=(14, 4))

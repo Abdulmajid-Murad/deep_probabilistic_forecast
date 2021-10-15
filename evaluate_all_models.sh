@@ -21,7 +21,7 @@ python main.py --model=LSTM_MC --task=classification --mode=evaluate
 python main.py --model=LSTM_MC --task=classification --mode=evaluate --adversarial_training
 
 python main.py --model=BNN --task=regression --mode=evaluate 
-python main.py --model=BNN --task=regression --mode=evaluate  --adversarial_training
+# python main.py --model=BNN --task=regression --mode=evaluate  --adversarial_training
 python main.py --model=BNN --task=classification --mode=evaluate 
 python main.py --model=BNN --task=classification --mode=evaluate --adversarial_training
 

@@ -12,6 +12,12 @@ In this repo, we build deep probabilistic models that forecast air quality value
 ## File Structure
 
 ## Evaluating Pre-Trained Models
+PM-value regression
+![](plots/SWAG/regression_adv.jpg)
+![](plots/SWAG/regression.jpg)
+
+Threshold-exceedance prediction
+![](plots/BNN/classification.jpg)
 
 ## Training Models
 

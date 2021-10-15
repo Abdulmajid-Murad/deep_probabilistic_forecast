@@ -1,33 +1,29 @@
 import os
 import argparse
 
+from probabilistic_models.nn_mc import NN_MC
+from probabilistic_models.ensemble import Deep_Ensemble
+from probabilistic_models.swag import SWAG
+from probabilistic_models.lstm_mc import LSTM_MC
+from probabilistic_models.bnn import BNN
+from probabilistic_models.gnn_mc import GNN_MC
+
 from utils.data_utils import data_loader
 from utils.torch_utils import torch_loader
-from nn_mc import NN_MC
-from ensemble import Deep_Ensemble
-from swag import SWAG
-from lstm_mc import LSTM_MC
-from bnn import BNN
+
 
 def run(args):
 
-    if args.model == 'NN_MC':
-        model_class = NN_MC
-        linear_input = True
-    elif args.model == 'Deep_Ensemble':
-        model_class = Deep_Ensemble
-        linear_input = True
-    elif args.model == 'SWAG':
-        model_class = SWAG
-        linear_input = True
-    elif args.model == 'LSTM_MC':
-        model_class = LSTM_MC
-        linear_input = False
-    elif args.model == 'BNN':
-        model_class = BNN
-        linear_input = True
 
-
+    models_types= {'NN_MC': {'model_class':NN_MC, 'sequential': False }, 
+            'Deep_Ensemble':{'model_class':Deep_Ensemble, 'sequential': False }, 
+            'SWAG':{'model_class':SWAG, 'sequential': False }, 
+            'LSTM_MC': {'model_class':LSTM_MC, 'sequential': True }, 
+            'BNN': {'model_class':BNN, 'sequential': False}, 
+            'GNN_MC':{'model_class':GNN_MC, 'sequential': True }
+        }
+    model_class = models_types[args.model]['model_class']
+    sequential = models_types[args.model]['sequential']
     X_train, y_train, X_test, y_test, stats =data_loader(args.data_dir,
                                                     task=args.task, 
                                                     historical_sequence_length=args.historical_sequence_length, 
@@ -36,27 +32,23 @@ def run(args):
                                                     end_train=args.end_train,
                                                     start_test=args.start_test,
                                                     end_test=args.end_test)
-    train_loader, test_loader = torch_loader(X_train, y_train, X_test, y_test, args.historical_sequence_length, args.batch_size, linear_input)
-    input_dim = X_train.shape[-1] * args.historical_sequence_length if linear_input else X_train.shape[-1] 
+    train_loader, test_loader = torch_loader(X_train, y_train, X_test, y_test, args.historical_sequence_length, args.batch_size, sequential)
+    input_dim = X_train.shape[-1] if sequential else X_train.shape[-1] * args.historical_sequence_length
     output_dim = y_train.shape[-1]
 
-    model = model_class(input_dim, output_dim, args.task)
+    model = model_class(input_dim, output_dim, args)
+    Nbatches = X_train.shape[0]/args.batch_size
 
     if args.mode == 'train':
-        if args.model == 'BNN':
-            #weight the complexity cost relative to the likelihood cost on each minibatch
-            Nbatches = X_train.shape[0]/args.batch_size
-            model.train(train_loader, args.n_epochs, args.batch_size, stats, args.pre_trained_dir, Nbatches, args.adversarial_training)
-        else:
-            model.train(train_loader, args.n_epochs, args.batch_size, stats, args.pre_trained_dir, args.adversarial_training)
+        model.train(train_loader, args.n_epochs, args.batch_size, stats, args.pretrained_dir, Nbatches, args.adversarial_training)
 
     elif args.mode == 'evaluate':
         if args.model == 'SWAG':
             # BatchNorm buffers update using train dataset.
-            model.evaluate(test_loader, args.n_samples, stats, args.pre_trained_dir, args.results_dir, train_loader,  args.adversarial_training)
+            model.evaluate(test_loader, args.n_samples, stats, args.pretrained_dir, args.plots_dir, train_loader,  args.adversarial_training)
 
         else:
-            model.evaluate(test_loader, args.n_samples, stats, args.pre_trained_dir, args.results_dir, args.adversarial_training)
+            model.evaluate(test_loader, args.n_samples, stats, args.pretrained_dir, args.plots_dir, args.adversarial_training)
 
 
 
@@ -76,14 +68,14 @@ if __name__ == '__main__':
     parser.add_argument('--batch_size', type=int, default=128)
     parser.add_argument('--n_epochs', type=int, default=2000)
 
-    parser.add_argument('--data_dir', type=str, default='./data', help='data director (default: ./data)')
-    parser.add_argument('--results_dir', type=str, default='./results',  help='dir for saving results figures (default: ../results)')
-    parser.add_argument('--pre_trained_dir', type=str, default='./pre_trained',  help='dir for saving trained models (default: ../pre_trained)')
+    parser.add_argument('--data_dir', type=str, default='./dataset', help='data director (default: ./dataset)')
+    parser.add_argument('--plots_dir', type=str, default='./plots',  help='dir for saving results figures (default: ../plots)')
+    parser.add_argument('--pretrained_dir', type=str, default='./pretrained',  help='dir for saving trained models (default: ../pretrained)')
     parser.add_argument('--n_samples', type=int, default=1000, help='number of samples to use during inference (default: 1000)')
 
     args = parser.parse_args()
-    os.makedirs(args.results_dir, exist_ok=True)
-    os.makedirs(args.pre_trained_dir, exist_ok=True)
+    os.makedirs(args.plots_dir, exist_ok=True)
+    os.makedirs(args.pretrained_dir, exist_ok=True)
     print('Input Args: ', args)
     run(args)
 

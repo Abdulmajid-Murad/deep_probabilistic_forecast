@@ -17,8 +17,17 @@ install 'probabilistic_forecast' locally  in “editable” mode ( any changes t
 
 ## File Structure
 
-## Evaluating Pre-Trained Models
+## Evaluating Pretrained Models
 
+Evaluate a pretrained model, for example:
+
+```bash
+python main.py --model=SWAG --task=regression --mode=evaluate  --adversarial_training
+```
+or evaluate all models:
+```bash
+bash evaluate_all_models.sh
+```
 ### PM-value regression
 
 ![](plots/SWAG/regression_adv.jpg)
@@ -29,11 +38,25 @@ install 'probabilistic_forecast' locally  in “editable” mode ( any changes t
 ![](plots/BNN/classification.jpg)
 
 ### Confidence Reliability
+```bash
+python tests/confidence_reliability.py
+```
 
+#### PM-value regression
 ![](plots/regression_confidence_reliability_all_stations.jpg)
 
+#### Threshold-exceedance prediction
 ![](plots/classification_confidence_reliability_all_stations.jpg)
 
 ## Training Models
+
+Train a single model, for example:
+```bash
+python main.py --model=SWAG --task=regression --mode=train --n_epochs=3000 --adversarial_training
+```
+or train all models:
+```bash
+bash train_all_models.sh
+```
 
 ## References for Code Base

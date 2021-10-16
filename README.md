@@ -58,5 +58,12 @@ or train all models:
 ```bash
 bash train_all_models.sh
 ```
+![](pretrained/BNN/train_bnn_reg.jpg)
 
-## References for Code Base
+## Attribution
+
+* Parts of the SWAG code is based on the official code for the paper "[A Simple Baseline for Bayesian Uncertainty in Deep Learning](https://arxiv.org/abs/2103.07719)": [https://github.com/wjmaddox/swa_gaussian](https://github.com/wjmaddox/swa_gaussian)
+
+* Parts of the GNN code is based ofn the official code for the paper "[Spectral Temporal Graph Neural Network for Multivariate Time-series Forecasting](https://arxiv.org/abs/1902.02476)": [https://github.com/microsoft/StemGNN](https://github.com/microsoft/StemGNN)
+
+

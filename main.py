@@ -1,15 +1,16 @@
 import os
 import argparse
 
-from probabilistic_models.nn_mc import NN_MC
-from probabilistic_models.ensemble import Deep_Ensemble
-from probabilistic_models.swag import SWAG
-from probabilistic_models.lstm_mc import LSTM_MC
-from probabilistic_models.bnn import BNN
-from probabilistic_models.gnn_mc import GNN_MC
+from probabilistic_forecast.nn_mc import NN_MC
+from probabilistic_forecast.ensemble import Deep_Ensemble
+from probabilistic_forecast.swag import SWAG
+from probabilistic_forecast.lstm_mc import LSTM_MC
+from probabilistic_forecast.bnn import BNN
+from probabilistic_forecast.gnn_mc import GNN_MC
 
-from utils.data_utils import data_loader
-from utils.torch_utils import torch_loader
+from probabilistic_forecast.utils.data_utils import data_loader
+from probabilistic_forecast.utils.torch_utils import torch_loader
+from probabilistic_forecast.utils.plot_utils import plot_results
 
 
 def run(args):
@@ -45,11 +46,12 @@ def run(args):
     elif args.mode == 'evaluate':
         if args.model == 'SWAG':
             # BatchNorm buffers update using train dataset.
-            model.evaluate(test_loader, args.n_samples, stats, args.pretrained_dir, args.plots_dir, train_loader,  args.adversarial_training)
+           results = model.evaluate(test_loader, args.n_samples,  args.pretrained_dir,  train_loader,  args.adversarial_training)
 
         else:
-            model.evaluate(test_loader, args.n_samples, stats, args.pretrained_dir, args.plots_dir, args.adversarial_training)
-
+            results = model.evaluate(test_loader, args.n_samples, args.pretrained_dir, args.adversarial_training)
+        
+        plot_results(results, args,  stats)
 
 
 if __name__ == '__main__':

@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import pandas as pd
 import torch
@@ -52,6 +53,178 @@ def nll_gaussian(x, mu, sig):
     exponent = -0.5*(x - mu)**2/sig**2
     log_coeff = np.log(sig) - 0.5*np.log(2*np.pi)
     return - (log_coeff + exponent).mean()
+
+def plot_confidence_reliability(resutls_all_models, args):
+    plots_dir = os.path.join(args.plots_dir)
+    os.makedirs(plots_dir , exist_ok=True)
+    fig_save_name = plots_dir +'/'+args.task + ('_confidence_reliability_adv' if args.adversarial_training else '_confidence_reliability')
+    if args.task == "regression":
+        plot_confidence_reliability_regression(resutls_all_models, fig_save_name)
+    elif args.task == "classification":
+        plot_confidence_reliability_classification(resutls_all_models, fig_save_name)
+
+def plot_results(results, args, stats):
+
+    plots_dir = os.path.join(args.plots_dir, args.model)
+    os.makedirs(plots_dir , exist_ok=True)
+    fig_save_name = plots_dir +'/'+args.task + ('_adv' if args.adversarial_training else '')
+    if args.task == "regression":
+        plot_regression(results[0], results[1], results[2], stats, fig_save_name)
+    elif args.task == "classification":
+        plot_classification(results[0], results[1], stats, fig_save_name)
+
+def plot_confidence_reliability_regression(resutls_all_models, fig_save_name, extension='.jpg'):
+    
+    Standard_scores = {'z_90': 1.64, 'z_95':1.96, 'z_99': 2.58}
+    all_max_ciw  = []
+    for key, value in resutls_all_models.items():
+        target_test,  mixture_mean, mixture_var, stats = value['target_test'], value['mixture_mean'],value['mixture_var'], value['stats']
+        upper = rescale(mixture_mean + Standard_scores['z_95']*np.sqrt(mixture_var), stats)
+        lower = rescale(mixture_mean - Standard_scores['z_95']*np.sqrt(mixture_var), stats)
+        ciw = upper - lower
+        max_ciw = ciw.max(axis=0)
+        all_max_ciw.append(max_ciw)      
+    all_max_ciw = np.array(all_max_ciw)
+    max_ciw = all_max_ciw.max(axis=0)
+
+    confidence_thresholds = np.arange(0, 1.0, 0.05)
+
+    fig2, axs2 = plt.subplots(2, 2, figsize=(16, 10))
+    fig, axs = plt.subplots(4, 4, figsize=(20, 3.5*4))
+
+    for key, value in resutls_all_models.items():
+        target_test, mixture_mean, mixture_var, stats = value['target_test'], value['mixture_mean'],value['mixture_var'], value['stats']
+        upper = rescale(mixture_mean + Standard_scores['z_95']*np.sqrt(mixture_var), stats)
+        lower = rescale(mixture_mean - Standard_scores['z_95']*np.sqrt(mixture_var), stats)
+        ciw = upper - lower
+        confidence = 1 - (ciw / max_ciw)
+
+        y_pred = rescale(mixture_mean, stats)
+        y_true = rescale(target_test, stats)  
+        absolute_error =  np.absolute((y_true - y_pred))
+        rows = len(stats['reg_cols'])
+    #     axs2_counter=0
+        for i in range(0, rows):
+            predict_confidence = confidence[:, i]
+            error = absolute_error[:, i]
+
+            shape = (len(confidence_thresholds),)
+            losses = np.zeros(shape)
+            counts = np.zeros(shape)
+            for idx, thresh in enumerate(confidence_thresholds):
+                mask = predict_confidence >= thresh
+                counts[idx] = mask.sum(-1)
+                losses[idx] = np.ma.masked_array(error, mask=~mask).sum()
+
+            if '_pm25' in stats['reg_cols'][i]:
+                particulate = "PM2.5"
+                idx = 0
+            else:
+                particulate = "PM10"
+                idx = 1
+
+            axs[int(i/2)][2*(i%2)].plot(confidence_thresholds, losses, label=key)
+            axs[int(i/2)][2*(i%2)].set_xlabel(r"Confidence Threshold $\tau$")
+            axs[int(i/2)][2*(i%2)].set_ylabel(r"Loss for confidence $ \geq \tau$")
+            axs[int(i/2)][2*(i%2)].set_title("Monitoring Station({0} - {1})".format(stats['reg_cols'][i].split('_')[0],particulate))
+            axs[int(i/2)][2*(i%2)].legend(loc='lower left')
+            axs[int(i/2)][2*(i%2)+1].plot(confidence_thresholds, counts, label=key)
+            axs[int(i/2)][2*(i%2)+1].set_xlabel(r"Confidence Threshold $\tau$")
+            axs[int(i/2)][2*(i%2)+1].set_ylabel("Count for " + r"confidence $\geq \tau$")
+            axs[int(i/2)][2*(i%2)+1].set_title("Monitoring Station({0} - {1})".format(stats['reg_cols'][i].split('_')[0],particulate))
+            axs[int(i/2)][2*(i%2)+1].legend(loc='lower left')
+
+            if stats['reg_cols'][i].split('_')[0] == 'Elgeseter':
+                axs2[idx][0].plot(confidence_thresholds, losses, label=key)
+                axs2[idx][0].set_xlabel(r"Confidence Threshold $\tau$")
+                axs2[idx][0].set_ylabel(r"Loss for confidence $ \geq \tau$")
+                axs2[idx][0].set_title("Monitoring Station({0} - {1})".format(stats['reg_cols'][i].split('_')[0],particulate))
+                axs2[idx][0].legend(loc='lower left')
+                axs2[idx][1].plot(confidence_thresholds, counts, label=key)
+                axs2[idx][1].set_xlabel(r"Confidence Threshold $\tau$")
+                axs2[idx][1].set_ylabel("Count for " + r"confidence $\geq \tau$")
+                axs2[idx][1].set_title("Monitoring Station({0} - {1})".format(stats['reg_cols'][i].split('_')[0],particulate))
+                axs2[idx][1].legend(loc='lower left')
+            
+    fig2.tight_layout()
+    fig2.savefig(fig_save_name + extension, bbox_inches='tight')
+    fig.tight_layout()
+    fig.savefig(fig_save_name + '_all_stations' + extension, bbox_inches='tight')
+
+def plot_confidence_reliability_classification(resutls_all_models, fig_save_name, extension='.jpg'):
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import matplotlib.ticker as mticker
+    from IPython.display import clear_output
+    import seaborn as sns
+    sns.set_theme()
+    sns.set(font_scale=1.2)
+    sns.set_style("whitegrid", {'grid.linestyle': '--'})
+    fig, axs = plt.subplots(4, 4, figsize=(20, 3.5*4))
+
+    fig2, axs2 = plt.subplots(2, 2, figsize=(16, 10))
+    confidence_thresholds = np.arange(0, 1.01, 0.05)
+
+    for key, value in resutls_all_models.items():
+        
+        target_test, samples, stats = value['target_test'], value['samples'], value['stats']
+        
+        y_prob = np.mean(samples, axis=0)
+        y_pred = np.rint(y_prob).astype(int) 
+        y_true = target_test.astype(int)   
+        p5, p95 = np.quantile(samples, [0.05, 0.95], axis=0)
+        confidence = 1 - (p95 - p5)
+        rows = len(stats['thre_cols'])
+
+        for i in range(0, rows):
+            labels = y_true[:, i]
+            predict_class = y_pred[:, i]
+            predict_confidence = confidence[:, i]
+            
+            shape = (len(confidence_thresholds),)
+            incorrect_predictions = np.zeros(shape)
+            counts = np.zeros(shape)
+            error = np.not_equal(predict_class, labels)
+            for idx, thresh in enumerate(confidence_thresholds):
+                mask = predict_confidence >= thresh
+                counts[idx] = mask.sum(-1)
+                incorrect_predictions[idx] = np.ma.masked_array(error, mask=~mask).sum()
+                               
+            if '_pm25' in stats['thre_cols'][i]:
+                particulate = "PM2.5"
+                idx = 0
+            else:
+                particulate = "PM10"
+                idx = 1
+
+            axs[int(i/2)][2*(i%2)].plot(confidence_thresholds, incorrect_predictions, label=key)
+            axs[int(i/2)][2*(i%2)].set_xlabel(r"Confidence Threshold $\tau$")
+            axs[int(i/2)][2*(i%2)].set_ylabel(r"Loss for confidence $ \geq \tau$")
+            axs[int(i/2)][2*(i%2)].set_title("Monitoring Station({0} - {1})".format(stats['thre_cols'][i].split('_')[0],particulate))
+            axs[int(i/2)][2*(i%2)].legend(loc='lower left')
+            axs[int(i/2)][2*(i%2)+1].plot(confidence_thresholds, counts, label=key)
+            axs[int(i/2)][2*(i%2)+1].set_xlabel(r"Confidence Threshold $\tau$")
+            axs[int(i/2)][2*(i%2)+1].set_ylabel("Count for " + r"confidence $\geq \tau$")
+            axs[int(i/2)][2*(i%2)+1].set_title("Monitoring Station({0} - {1})".format(stats['thre_cols'][i].split('_')[0],particulate))
+            axs[int(i/2)][2*(i%2)+1].legend(loc='lower left')
+        
+            if stats['thre_cols'][i].split('_')[0] == 'Elgeseter':
+                axs2[idx][0].plot(confidence_thresholds, incorrect_predictions, label=key)
+                axs2[idx][0].set_xlabel(r"Confidence Threshold $\tau$")
+                axs2[idx][0].set_ylabel(r"Loss for confidence $ \geq \tau$")
+                axs2[idx][0].set_title("Monitoring Station({0} - {1})".format(stats['thre_cols'][i].split('_')[0],particulate))
+                axs2[idx][0].legend(loc='lower left')
+                axs2[idx][1].plot(confidence_thresholds, counts, label=key)
+                axs2[idx][1].set_xlabel(r"Confidence Threshold $\tau$")
+                axs2[idx][1].set_ylabel("Count for " + r"confidence $\geq \tau$")
+                axs2[idx][1].set_title("Monitoring Station({0} - {1})".format(stats['thre_cols'][i].split('_')[0],particulate))
+                axs2[idx][1].legend(loc='lower left')
+                
+    fig2.tight_layout()
+    fig2.savefig(fig_save_name + extension, bbox_inches='tight')
+    fig.tight_layout()
+    fig.savefig(fig_save_name + '_all_stations' + extension, bbox_inches='tight')
+
 
 def plot_regression(target_test, mixture_mean, mixture_var, stats, fig_save_name):
 

@@ -3,10 +3,10 @@ import os
 import numpy as np
 import torch
 import torch.nn as nn
-from utils.torch_utils import get_device
-from utils.plot_utils import plot_training_curve, plot_regression, plot_classification
+from probabilistic_forecast.utils.torch_utils import get_device
+from probabilistic_forecast.utils.plot_utils import plot_training_curve, plot_regression, plot_classification
 
-from utils.swag_utils import SWAG_Model, bn_update, schedule, adjust_learning_rate
+from probabilistic_forecast.utils.swag_utils import SWAG_Model, bn_update, schedule, adjust_learning_rate
 
 
 class SWAG():
@@ -128,28 +128,17 @@ class SWAG():
 
         pre_trained_dir = os.path.join(pre_trained_dir, type(self).__name__)
         os.makedirs(pre_trained_dir , exist_ok=True)
-        if adversarial_training:
-            model_save_name = pre_trained_dir+'/trained_network_'+self.task+'_adv.pt'
-            fig_save_name = pre_trained_dir+'/training_curve_'+self.task+'_adv.pdf' 
-        else:
-            model_save_name = pre_trained_dir+'/trained_network_'+self.task+'.pt'
-            fig_save_name = pre_trained_dir+'/training_curve_'+self.task+'.pdf' 
+        model_save_name = pre_trained_dir + '/trained_network_' + self.task + ('_adv.pt' if adversarial_training else '.pt')
+        fig_save_name = pre_trained_dir + '/training_curve_' +self.task + ('_adv.pdf' if adversarial_training else '.pdf')
         torch.save(self.swag_network.state_dict(), model_save_name)
         plot_training_curve(loss_history, lr_history, fig_save_name)
         
 
-    def evaluate(self, test_loader, n_samples, stats, pre_trained_dir, results_dir, train_loader, adversarial_training=True):
+    def evaluate(self, test_loader, n_samples, pre_trained_dir, train_loader, adversarial_training=True):
         print('Evaluating a pretrained {} model {} adversarial training. Task: {}'.format(type(self).__name__, 
             'with' if adversarial_training else 'without', self.task))
         pre_trained_dir = os.path.join(pre_trained_dir, type(self).__name__)
-        results_dir = os.path.join(results_dir, type(self).__name__)
-        os.makedirs(results_dir , exist_ok=True)
-        if adversarial_training:
-            model_save_name = pre_trained_dir+'/trained_network_'+self.task+'_adv.pt'
-            fig_save_name = results_dir+'/'+self.task+'_adv' 
-        else:
-            model_save_name = pre_trained_dir+'/trained_network_'+self.task+'.pt'
-            fig_save_name = results_dir+'/'+self.task
+        model_save_name = pre_trained_dir + '/trained_network_'+ self.task + ('_adv.pt' if adversarial_training else '.pt')
 
         self.swag_network.load_state_dict(torch.load(model_save_name))
         for (module, name) in self.swag_network.params:
@@ -179,7 +168,7 @@ class SWAG():
             mixture_mean = np.mean(samples_mean, axis=0)
             mixture_var = np.mean(samples_var + np.square(samples_mean), axis=0) - np.square(mixture_mean)
             target_test  = self.get_target_test(test_loader)
-            plot_regression(target_test, mixture_mean, mixture_var, stats, fig_save_name)
+            return target_test, mixture_mean, mixture_var
 
         elif self.task =='classification':
             samples = []
@@ -196,7 +185,7 @@ class SWAG():
                 samples.append(pred_i)
             samples = np.array(samples)  
             target_test  = self.get_target_test(test_loader)
-            plot_classification(target_test, samples, stats, fig_save_name)
+            return target_test, samples
 
     def get_target_test(self, test_loader):
         target_set = []

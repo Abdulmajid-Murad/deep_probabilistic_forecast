@@ -9,11 +9,12 @@ In this repo, we build deep probabilistic models that forecast air quality value
 
 ## Installation
 
-install 'probabilistic_forecast' locally  in “editable” mode ( any changes to the original package would reflect directly in your environment, os you don't have to re-insall the package every time you make some changes): 
+install probabilistic_forecast' locally  in “editable” mode ( any changes to the original package would reflect directly in your environment, os you don't have to re-insall the package every time you make some changes): 
 
  ```bash
  pip install -e .
  ```
+Use the configuration file  `equirements.txt` to the install the required packages to run this project.
 
 ## File Structure
 

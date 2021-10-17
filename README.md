@@ -18,6 +18,41 @@ Use the configuration file  `equirements.txt` to the install the required packag
 
 ## File Structure
 
+
+```bash
+
+├── probabilistic_forecast/
+│   ├── bnn.py (class definition for the Bayesian neural networks model)
+│   ├── ensemble.py (class definition for the deep ensemble model)
+│   ├── gnn_mc.py (class definition for the graph neural network model with MC dropout)
+│   ├── lstm_mc.py (class definition for the LSTM model with MC dropout)
+│   ├── nn_mc.py (class definition for the standard neural network model with MC droput)
+│   ├── swag.py (class definition for the SWAG model)
+│   └── utils/
+│       ├── data_utils.py (utility functions for data loading and pre-processing)
+│       ├── gnn_utils.py (utility functions for GNN)
+│       ├── plot_utils.py (utility functions for plotting training and evaluation results)
+│       ├── swag_utils.py  (utility functions for SWAG)
+│       └── torch_utils.py (utility functions for torch dataloader, checking if CUDA is available)
+├── dataset/
+│   ├── air_quality_measurements.csv (dataset of air quality measurements)
+│   ├── street_cleaning.csv  (dataset of air street cleaning records)
+│   ├── traffic.csv (dataset of traffic volumes)
+│   └── weather.csv  (dataset of weather observations)
+
+├── main.py (main function with argument parsing to load data, build a model and evaluate (or train))
+├── tests/
+│   └── confidence_reliability.py (script to evaluate the reliability of confidence estimates using pretrained models)
+├── plots/ (foler containing all evaluation plots)
+├── pretrained/ (foler containing pretrained models and training curves plots)
+├── evaluate_all_models.sh (bash script for evaluating all models at once)
+└── train_all_models.sh (bash script for training all models at once)
+
+```
+
+
+
+
 ## Evaluating Pretrained Models
 
 Evaluate a pretrained model, for example:

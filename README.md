@@ -20,7 +20,7 @@ Use the configuration file  `equirements.txt` to the install the required packag
 
 
 ```bash
-
+.
 ├── probabilistic_forecast/
 │   ├── bnn.py (class definition for the Bayesian neural networks model)
 │   ├── ensemble.py (class definition for the deep ensemble model)
@@ -39,10 +39,9 @@ Use the configuration file  `equirements.txt` to the install the required packag
 │   ├── street_cleaning.csv  (dataset of air street cleaning records)
 │   ├── traffic.csv (dataset of traffic volumes)
 │   └── weather.csv  (dataset of weather observations)
-
 ├── main.py (main function with argument parsing to load data, build a model and evaluate (or train))
 ├── tests/
-│   └── confidence_reliability.py (script to evaluate the reliability of confidence estimates using pretrained models)
+│   └── confidence_reliability.py (script to evaluate the reliability of confidence estimates of pretrained models)
 ├── plots/ (foler containing all evaluation plots)
 ├── pretrained/ (foler containing pretrained models and training curves plots)
 ├── evaluate_all_models.sh (bash script for evaluating all models at once)

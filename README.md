@@ -1,6 +1,7 @@
 # Deep Probabilistic Forecast
 PyTorch implementation of deep probabilistic forecast applied to air quality.
 
+[![Watch the video](https://i.imgur.com/vKb2F1B.png)](https://youtu.be/TqjIherIjc4)
 
 ## Introduction
 

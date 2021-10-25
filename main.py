@@ -7,6 +7,7 @@ from probabilistic_forecast.swag import SWAG
 from probabilistic_forecast.lstm_mc import LSTM_MC
 from probabilistic_forecast.bnn import BNN
 from probabilistic_forecast.gnn_mc import GNN_MC
+from probabilistic_forecast.nn_standard import NN_Standard
 
 from probabilistic_forecast.utils.data_utils import data_loader
 from probabilistic_forecast.utils.torch_utils import torch_loader
@@ -20,7 +21,8 @@ def run(args):
             'Deep_Ensemble':{'model_class':Deep_Ensemble, 'sequential': False }, 
             'SWAG':{'model_class':SWAG, 'sequential': False }, 
             'LSTM_MC': {'model_class':LSTM_MC, 'sequential': True }, 
-            'BNN': {'model_class':BNN, 'sequential': False}, 
+            'BNN': {'model_class':BNN, 'sequential': False},
+            'NN_Standard': {'model_class':NN_Standard, 'sequential': False },
             'GNN_MC':{'model_class':GNN_MC, 'sequential': True }
         }
     model_class = models_types[args.model]['model_class']

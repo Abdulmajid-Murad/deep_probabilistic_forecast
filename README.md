@@ -1,9 +1,9 @@
 # Deep Probabilistic Forecast
 PyTorch implementation of deep probabilistic forecast applied to air quality.
 
-<img src="plots/epistemic_vs_aleatoric.jpeg" alt="drawing" width="600"/>
+<img src="plots/epistemic_vs_aleatoric.jpeg" alt="drawing" width="400"/>
 
-[![Watch the video]](https://youtu.be/TqjIherIjc4)
+[Animation](https://youtu.be/TqjIherIjc4)
 
 ## Introduction
 

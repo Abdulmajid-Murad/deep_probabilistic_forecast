@@ -270,7 +270,7 @@ class BNN():
             'with' if adversarial_training else 'without', self.task))
         pre_trained_dir = os.path.join(pre_trained_dir, type(self).__name__)
         model_save_name = pre_trained_dir + '/trained_network_'+ self.task + ('_adv.pt' if adversarial_training else '.pt')
-        self.network.load_state_dict(torch.load(model_save_name))
+        self.network.load_state_dict(torch.load(model_save_name, map_location=self.device))
         self.network.eval()
         if self.task =='regression':
             samples_mean, samples_var = [], []

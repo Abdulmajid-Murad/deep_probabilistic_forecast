@@ -1,11 +1,11 @@
 # Deep Probabilistic Forecast
-PyTorch implementation of deep probabilistic forecast applied to air quality.
+PyTorch implementation of a paper under review, titled: **Probabilistic Deep Learning to Quantify Uncertainty in Air Quality Forecasting**
 
 
 
 ## Introduction
 
-In this repo, we build deep probabilistic models that forecast air quality values and predict threshold exceedance events.
+In this repo, we build a set of probabilistic deep learning models for air quality forecasting that quantify both aleatoric and epistemic uncertainties, and study how to represent and manipulate their predictive uncertainties.
 
 
 ## Installation
@@ -132,7 +132,10 @@ or train all models:
 ```bash
 bash train_all_models.sh
 ```
-![](pretrained/BNN/train_bnn_reg.jpg)
+
+|<img src="pretrained/BNN/train_bnn_reg.jpg" alt="drawing" width="800"/>|
+|:--:| 
+|Learning curve of training a BNNs model to forecast PM-values. **Left:** negative log-likelihood loss,<br />  **Center:** KL loss estimated using MC sampling, **Right:** learning rate of exponential decay.|
 
 ## Attribution
 

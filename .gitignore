@@ -1,7 +1,6 @@
 __pycache__
 .vscode
-results/
 *.egg-info/
-tests/decision_making.py
-probabilistic_forecast/nn_standard.py
-tests/
+*.ipynb
+.ipynb_checkpoints
+tests/models

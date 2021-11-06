@@ -20,7 +20,7 @@ Use the configuration file  `equirements.txt` to the install the required packag
 ## File Structure
 
 
-```bash
+```yml
 .
 ├── probabilistic_forecast/
 │   ├── bnn.py (class definition for the Bayesian neural networks model)
@@ -28,6 +28,7 @@ Use the configuration file  `equirements.txt` to the install the required packag
 │   ├── gnn_mc.py (class definition for the graph neural network model with MC dropout)
 │   ├── lstm_mc.py (class definition for the LSTM model with MC dropout)
 │   ├── nn_mc.py (class definition for the standard neural network model with MC droput)
+│   ├── nn_standard.py (class definition for the standard neural network model without MC dropout)
 │   ├── swag.py (class definition for the SWAG model)
 │   └── utils/
 │       ├── data_utils.py (utility functions for data loading and pre-processing)
@@ -43,6 +44,7 @@ Use the configuration file  `equirements.txt` to the install the required packag
 ├── main.py (main function with argument parsing to load data, build a model and evaluate (or train))
 ├── tests/
 │   └── confidence_reliability.py (script to evaluate the reliability of confidence estimates of pretrained models)
+│   └── epistemic_vs_aleatoric.py (script to show the impact of quantifying both epistemic and aleatoric uncertainties)
 ├── plots/ (foler containing all evaluation plots)
 ├── pretrained/ (foler containing pretrained models and training curves plots)
 ├── evaluate_all_models.sh (bash script for evaluating all models at once)

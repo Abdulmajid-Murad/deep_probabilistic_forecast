@@ -1,4 +1,5 @@
-# Deep Probabilistic Forecast
+# Probabilistic Deep Forecast
+
 PyTorch implementation of a paper under review, titled: **Probabilistic Deep Learning to Quantify Uncertainty in Air Quality Forecasting**
 
 

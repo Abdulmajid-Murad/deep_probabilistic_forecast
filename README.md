@@ -41,7 +41,8 @@ Use the configuration file  `equirements.txt` to the install the required packag
 │   ├── air_quality_measurements.csv (dataset of air quality measurements)
 │   ├── street_cleaning.csv  (dataset of air street cleaning records)
 │   ├── traffic.csv (dataset of traffic volumes)
-│   └── weather.csv  (dataset of weather observations)
+│   ├── weather.csv  (dataset of weather observations)
+│   └── visualize_data.py  (script to visualize all dataset)
 ├── main.py (main function with argument parsing to load data, build a model and evaluate (or train))
 ├── tests/
 │   └── confidence_reliability.py (script to evaluate the reliability of confidence estimates of pretrained models)
@@ -138,6 +139,23 @@ bash train_all_models.sh
 |:--:| 
 |Learning curve of training a BNNs model to forecast PM-values. **Left:** negative log-likelihood loss,<br />  **Center:** KL loss estimated using MC sampling, **Right:** learning rate of exponential decay.|
 
+## Dataset
+
+Run the following command to visualize all data
+
+```bash
+python dataset/visualize_data.py
+```
+
+It will generate plots in the "dataset folder". For example:
+
+| <img src="dataset/aq_index.jpg" alt="drawing" width="800"/> |
+|:--:| 
+|Air quality level over two years in one representative monitoring station (Elgeseter) in Trondheim, Norway|
+
+
+
+
 ## Attribution
 
 * Parts of the SWAG code is based on the official code for the paper "[A Simple Baseline for Bayesian Uncertainty in Deep Learning](https://arxiv.org/abs/2103.07719)": [https://github.com/wjmaddox/swa_gaussian](https://github.com/wjmaddox/swa_gaussian).
@@ -148,3 +166,8 @@ bash train_all_models.sh
 
 * The function `h5_to_vt` in `epistemic_vs_aleatoric.py` that convert h5 file to vtp files to be used by ParaView, is based on [https://github.com/tomgoldstein/loss-landscape](https://github.com/tomgoldstein/loss-landscape).
 
+* The air quality dataset is a part of the open database of air quality measurements offered by the Norwegian Institute for Air Research (NILU) [https://www.nilu.com/open-data/](https://www.nilu.com/open-data/).
+
+* The meteorological data are based on historical weather and climate data offered by the Norwegian Meteorological Institute [https://frost.met.no](https://frost.met.no).
+
+* The traffic data is based on aggregated traffic volumes offered by the Norwegian Public Roads Administration [https://www.vegvesen.no/trafikkdata/start/om-api](https://www.vegvesen.no/trafikkdata/start/om-api).

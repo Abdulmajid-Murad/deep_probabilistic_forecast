@@ -98,12 +98,12 @@ def evaluate_all_models(task):
             else:
                 results_model['target_test'], results_model['samples'], results_model['stats'] = results[0], results[1], stats
         resutls_all_models[model] = results_model
-    return resutls_all_models, args
+    return resutls_all_models
 
 
 def plot_epistemic_vs_aleatoric():
 
-    results_class, args = evaluate_all_models(task='classification')
+    results_class= evaluate_all_models(task='classification')
     value = results_class['BNN']
     target_test, samples, stats = value['target_test'], value['samples'], value['stats']
 
@@ -182,23 +182,21 @@ def plot_epistemic_vs_aleatoric():
             axs2.set_ylabel(r'Confidence threshold $\tau2$'+ '\n (Normalized Epistemic confidence)',labelpad=10)
             axs2.set_zlabel('Decision Score (F1)')
 
-    plots_dir = os.path.join(args.plots_dir)
-    os.makedirs(plots_dir , exist_ok=True)
         
     fig.tight_layout()
     fig2.tight_layout()
-    fig.savefig(plots_dir+'/decision_making_standard.pdf', bbox_inches='tight')
-    fig2.savefig(plots_dir+'/decision_making_probabilistic.pdf', bbox_inches='tight')
+    fig.savefig('./plots/decision_making_standard.pdf', bbox_inches='tight')
+    fig2.savefig('./plots/decision_making_probabilistic.pdf', bbox_inches='tight')
 
     #save to .hf, which can be used for ParaView rendering
-    f = h5py.File('data.h5', 'w' )
+    f = h5py.File('.tests/data.h5', 'w' )
     f['xcoordinates'] = tau1_list
     f['ycoordinates'] = tau2_list
     f['f1'] = f1_2d
     f.close()
 
     #Convert the surface .h5 file to a .vtp file.
-    h5_to_vtp(surf_file='./data.hf', surf_name='f1', zmax=1)
+    h5_to_vtp(surf_file='./tests/data.hf', surf_name='f1', zmax=1)
 
 # This function adopted from:https://github.com/tomgoldstein/loss-landscape
 

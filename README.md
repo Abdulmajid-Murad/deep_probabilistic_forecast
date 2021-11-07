@@ -115,7 +115,7 @@ python tests/epistemic_vs_aleatoric.py
 ```
 It will generate the following plots:
 
-Decision score in a non-probabilistic model <br /> as a function of only aleatoric confidence $\tau_1$.             |  Decision score in a probabilistic model as a function <br />  of both epistemic and aleatoric confidences: $\tau_2, \tau_1$. 
+Decision score in a non-probabilistic model <br /> as a function of only aleatoric confidence.             |  Decision score in a probabilistic model as a function <br />  of both epistemic and aleatoric confidences. 
 :-------------------------:|:-------------------------:
 <img src="plots/decision_making_standard.jpg" alt="drawing" width="400"/> |  <img src="plots/decision_making_probabilistic.jpg" alt="drawing" width="400"/>
 

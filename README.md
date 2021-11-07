@@ -25,7 +25,7 @@ Use the configuration file  `equirements.txt` to the install the required packag
 ## File Structure
 
 
-```yml
+```bash
 .
 ├── probabilistic_forecast/
 │   ├── bnn.py (class definition for the Bayesian neural networks model)

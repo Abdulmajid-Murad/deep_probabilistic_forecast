@@ -9,6 +9,10 @@ PyTorch implementation of a paper under review, titled: **Probabilistic Deep Lea
 In this repo, we build a set of probabilistic deep learning models for air quality forecasting that quantify both aleatoric and epistemic uncertainties, and study how to represent and manipulate their predictive uncertainties.
 
 
+| <img src="plots/epistemic_vs_aleatoric2.jpg" alt="drawing" width="800"/> |
+|:--:| 
+| Decision score as a function of normalized aleatoric and epistemic confidence thresholds . See [animation video here](https://youtu.be/cGLsYwtn6Ng)|
+
 ## Installation
 
 install probabilistic_forecast' locally  in “editable” mode ( any changes to the original package would reflect directly in your environment, os you don't have to re-insall the package every time you make some changes): 
@@ -118,9 +122,6 @@ Decision score in a non-probabilistic model <br /> as a function of only aleator
 It will also generate an `.vtp` file, which can be used to generate a 3D plot with detailed rendering and lighting in [ParaView](https://www.paraview.org/).
 
 
-| <img src="plots/epistemic_vs_aleatoric2.jpg" alt="drawing" width="800"/> |
-|:--:| 
-| Decision F1 score as a function of normalized aleatoric and epistemic confidence thresholds . See [animation video here](https://youtu.be/cGLsYwtn6Ng)|
 
 
 

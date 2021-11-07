@@ -9,7 +9,7 @@ PyTorch implementation of a paper under review, titled: **Probabilistic Deep Lea
 In this repo, we build a set of probabilistic deep learning models for air quality forecasting that quantify both aleatoric and epistemic uncertainties, and study how to represent and manipulate their predictive uncertainties.
 
 
-| <img src="plots/epistemic_vs_aleatoric.jpeg" alt="drawing" width="800"/> |
+| <img src="plots/epistemic_vs_aleatoric.png" alt="drawing" width="800"/> |
 |:--:| 
 | Decision score as a function of normalized aleatoric and epistemic confidence thresholds . See [animation video here](https://youtu.be/cGLsYwtn6Ng)|
 

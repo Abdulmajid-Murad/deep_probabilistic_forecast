@@ -150,7 +150,7 @@ python dataset/visualize_data.py
 
 It will generate plots in the "dataset folder". For example:
 
-| <img src="dataset/aq_index.jpg" alt="drawing" width="800"/> |
+| <img src="/plots/dataset_visualization/aq_index.jpg" alt="drawing" width="800"/> |
 |:--:| 
 |Air quality level over two years in one representative monitoring station (Elgeseter) in Trondheim, Norway|
 

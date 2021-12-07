@@ -1,6 +1,6 @@
 # Probabilistic Deep Forecast
 
-PyTorch implementation of a paper, titled: **Probabilistic Deep Learning to Quantify Uncertainty in Air Quality Forecasting** [![arXiv](https://img.shields.io/badge/stat.ML-arXiv%3A2006.06848-B31B1B.svg)](https://arxiv.org/abs/2112.02622).
+PyTorch implementation of a paper, titled: **Probabilistic Deep Learning to Quantify Uncertainty in Air Quality Forecasting** [![arXiv](https://img.shields.io/badge/CS.ML-arXiv%3A2112.02622-B31B1B)](https://arxiv.org/abs/2112.02622).
 
 
 

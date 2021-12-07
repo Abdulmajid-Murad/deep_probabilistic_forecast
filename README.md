@@ -10,7 +10,7 @@ In this work, we develop a set of probabilistic deep models for air quality fore
 data using recurrent and graph neural networks. Finally, we show the practical impact of uncertainty estimation and demonstrate that, indeed, probabilistic models are more suitable for making informed decisions, for example:
 | <img src="plots/epistemic_vs_aleatoric.png" alt="drawing" width="800"/> |
 |:--:| 
-| Decision score as a function of normalized aleatoric and epistemic confidence thresholds . See [animation video here](https://youtu.be/cGLsYwtn6Ng)|
+| Decision score as a function of normalized aleatoric and epistemic confidence thresholds. A probabilistic model provides a wider area of control over the risk profile based on the costs of false positives versus false negatives, which leads  to making more informed and risk-aware decisions. [Animation](https://youtu.be/cGLsYwtn6Ng)|
 
 ## Installation
 

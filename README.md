@@ -7,6 +7,7 @@ PyTorch implementation of a paper, titled: **Probabilistic Deep Learning to Quan
 ## Introduction
 
 In this work, we develop a set of deep probabilistic models for air quality forecasting that quantify both aleatoric and epistemic uncertainties and study how to represent and manipulate their predictive uncertainties. In particular:
+
     * We conduct a broad empirical comparison and exploratory assessment of state-of-the-art techniques in deep probabilistic learning applied to air quality forecasting. Through exhaustive experiments, we describe training these models and evaluating their predictive uncertainties using various metrics for regression and classification tasks.
     * We improve uncertainty estimation using adversarial training to smooth the conditional output distribution locally around training data points.
     * We apply uncertainty-aware models that exploit the temporal and spatial correlation inherent in air quality data using recurrent and graph neural networks.

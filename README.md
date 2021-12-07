@@ -6,13 +6,8 @@ PyTorch implementation of a paper, titled: **Probabilistic Deep Learning to Quan
 
 ## Introduction
 
-In this work, we develop a set of deep probabilistic models for air quality forecasting that quantify both aleatoric and epistemic uncertainties and study how to represent and manipulate their predictive uncertainties. In particular:
-
-    1. We conduct a broad empirical comparison and exploratory assessment of state-of-the-art techniques in deep probabilistic learning applied to air quality forecasting. Through exhaustive experiments, we describe training these models and evaluating their predictive uncertainties using various metrics for regression and classification tasks.
-    2. We improve uncertainty estimation using adversarial training to smooth the conditional output distribution locally around training data points.
-    3. We apply uncertainty-aware models that exploit the temporal and spatial correlation inherent in air quality data using recurrent and graph neural networks.
-    4. We introduce a new state-of-the-art example for air quality forecasting by defining the problem setup and selecting proper input features and models.
-
+In this work, we develop a set of probabilistic deep models for air quality forecasting that quantify both aleatoric and epistemic uncertainties and study how to represent and manipulate their predictive uncertainties. Since real-world phenomena are inherently smooth, we improve uncertainty estimation using adversarial training to smooth the conditional output distribution locally around training data points. Additionally, we exploit the temporal and spatial correlation inherent in air quality
+data using recurrent and graph neural networks. Finally, we show the practical impact of uncertainty estimation and demonstrate that, indeed, probabilistic models are more suitable for making informed decisions, for example:
 | <img src="plots/epistemic_vs_aleatoric.png" alt="drawing" width="800"/> |
 |:--:| 
 | Decision score as a function of normalized aleatoric and epistemic confidence thresholds . See [animation video here](https://youtu.be/cGLsYwtn6Ng)|
